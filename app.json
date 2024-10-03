@@ -2,6 +2,30 @@
   "expo": {
     "name": "MyApp",
     "slug": "MyApp",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "orientation": "portrait",
+
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#E95322"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app requires access to the camera to take pictures.",
+        "NSLocationWhenInUseUsageDescription": "This app requires access to your location."
+      }
+    },
+
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E95322"
+      }
+    },
+    "web": {}
   }
 }
