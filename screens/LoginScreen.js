@@ -13,7 +13,8 @@ export default function LoginScreen({ navigation }) {
       const user = userCredential.user;
 
       alert("Login successful: " + user.email);
-      navigation.navigate("UserScreen", { name: user.email });
+      // navigation.navigate("UserScreen", { name: user.email });
+      navigation.navigate("MealForm"); // Navigate to MealForm.js after login
     } catch (error) {
       alert("Login error: " + error.message);
     }
