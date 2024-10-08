@@ -92,6 +92,7 @@ import MealForm from './screens/MealForm';
 import MealListScreen from './screens/MealListScreen';
 import UpdateMealScreen from './screens/UpdateMealScreen'
 
+
 const Stack = createStackNavigator();
 
 export default function App() {
