@@ -28,6 +28,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const mealRoutes = require('./route/mealRoute');
+const orpRoutes = require('./route/OrphanageRqRoute')
 const cors = require('cors');  // Import CORS to handle cross-origin requests
 
 const app = express();
@@ -38,6 +39,7 @@ app.use(cors());  // Enable CORS for all routes
 
 // Routes
 app.use('/api', mealRoutes);
+app.use('/api', orpRoutes);
 
 // MongoDB Connection
 mongoose.connect('mongodb+srv://spm:IhateSliit31@cluster0.fl3zzyh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', 

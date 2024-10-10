@@ -5,6 +5,7 @@ const MealSchema = new mongoose.Schema({
   description: String,
   category: { type: String, required: true },  // Ensure category is required
   price: Number,
+  email: String,
   discount: Number,
   expiryTime: Date,
   isVegetarian: Boolean,
