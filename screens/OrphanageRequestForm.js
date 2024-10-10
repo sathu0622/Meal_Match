@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableOpacity, Platform, ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OrphanageRequestForm = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -15,6 +16,24 @@ const OrphanageRequestForm = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   const [mealTime, setMealTime] = useState('');
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [email, setEmail] = useState(null); // State to hold the email
+
+
+  useEffect(() => {
+  
+    // Retrieve the email from AsyncStorage when the component mounts
+    AsyncStorage.getItem("userEmail")
+        .then((storedEmail) => {
+            if (storedEmail !== null) {
+                console.log("User Email:", storedEmail);
+                setEmail(storedEmail); // Store email in state if needed
+            }
+        })
+        .catch((error) => {
+            console.error("Error retrieving user email:", error);
+      });
+},[]);
+
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -34,6 +53,7 @@ const OrphanageRequestForm = ({ navigation }) => {
       contectNo,
       count: parseInt(count),
       items,
+      email: email,
       comments,
       date: date.toISOString(),
       mealTime,
@@ -139,17 +159,17 @@ const OrphanageRequestForm = ({ navigation }) => {
 
             {/* Bottom Navigation Bar */}
             <View style={styles.bottomNav}>
-        <TouchableOpacity onPress={() => navigation.navigate('MealListScreen')} style={styles.navButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.navButton}>
           <Icon name="home-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('MealForm')} style={styles.navButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('OrphanageRequestForm')} style={styles.navButton}>
           <Icon name="add-circle-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Add</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('TopMeal')} style={styles.navButton}>
-          <Icon name="person-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Profile</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('RequestListScreen')} style={styles.navButton}>
+          <Icon name="document-text-outline" size={30} color="#D55A00" />
+          <Text style={styles.navText}>Requste</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -163,7 +183,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: '#FBE6B9',
-    flexGrow: 1,
+    paddingBottom: 100,
   },
   title: {
     fontSize: 24,
@@ -202,6 +222,26 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: '#FFF',
     fontSize: 16,
+  },
+  bottomNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc',
+    backgroundColor: '#f5f5f5',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+  },
+  navButton: {
+    alignItems: 'center',
+  },
+  navText: {
+    textAlign: 'center',
+    color: '#D55A00',
+    marginTop: 5,
+    fontSize: 12,
   },
 });
 

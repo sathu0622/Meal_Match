@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Alert } from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const RequestListScreen = ({ navigation }) => {
   const [requests, setRequests] = useState([]);
@@ -10,15 +12,33 @@ const RequestListScreen = ({ navigation }) => {
   useEffect(() => {
     fetchRequests();
   }, []);
+  // const fetchRequests = async () => {
+  //   try {
+  //     const response = await axios.get('http://192.168.8.159:5000/api/orp');
+  //     setRequests(response.data);
+  //     fetchRequests();
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert('Error fetching requests. Please try again.');
+  //   }
+  // };
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get('http://192.168.8.159:5000/api/orp');
+      // Retrieve logged-in user's email
+      const userEmail = await AsyncStorage.getItem('userEmail');
+      
+      if (!userEmail) {
+        console.error('No user email found');
+        return;
+      }
+  
+      // Fetch meals for this email only
+      const response = await axios.get(`http://192.168.8.159:5000/api/orpmail?email=${userEmail}`);
       setRequests(response.data);
       fetchRequests();
     } catch (error) {
       console.error(error);
-      alert('Error fetching requests. Please try again.');
     }
   };
 
@@ -84,22 +104,6 @@ const RequestListScreen = ({ navigation }) => {
           </TouchableOpacity>
         )}
       </View>
-
-            {/* Bottom Navigation Bar */}
-            <View style={styles.bottomNav}>
-        <TouchableOpacity onPress={() => navigation.navigate('MealListScreen')}>
-          <Icon name="home-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('MealForm')}>
-          <Icon name="add-circle-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Add</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('TopMeal')}>
-          <Icon name="person-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Profile</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
   
@@ -112,6 +116,20 @@ const RequestListScreen = ({ navigation }) => {
         keyExtractor={(item) => item._id}
         contentContainerStyle={{ paddingBottom: 20 }}
       />
+            <View style={styles.bottomNav}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <Icon name="home-outline" size={30} color="#D55A00" />
+          <Text style={styles.navText}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('OrphanageRequestForm')}>
+          <Icon name="add-circle-outline" size={30} color="#D55A00" />
+          <Text style={styles.navText}>Add</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('RequestListScreen')}>
+          <Icon name="document-text-outline" size={30} color="#D55A00" />
+          <Text style={styles.navText}>Requste</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -206,7 +224,7 @@ const styles = StyleSheet.create({
     color: '#D55A00',
     marginTop: 5,
     fontSize: 12,
-  }
+  },
 });
 
 export default RequestListScreen;

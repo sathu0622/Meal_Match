@@ -8,6 +8,7 @@ const OrphanageRqSchema = new mongoose.Schema({
   items: String,
   comments: String,
   date: Date,
+  email: String,
   mealTime: String,
   status: { type: Boolean, default: false }   // Correct the typo here
 });

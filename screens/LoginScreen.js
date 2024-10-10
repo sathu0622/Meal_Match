@@ -16,7 +16,7 @@ export default function LoginScreen({ navigation }) {
 
       alert("Login successful: " + user.email);
       // navigation.navigate("UserScreen", { name: user.email });
-      navigation.navigate("MealListScreen"); // Navigate to MealForm.js after login
+      navigation.navigate("RequestListScreen"); // Navigate to MealForm.js after login
     } catch (error) {
       alert("Login error: " + error.message);
     }

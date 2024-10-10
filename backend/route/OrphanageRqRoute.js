@@ -4,6 +4,7 @@ const {
     getAllOrphanageRq,
     updateOrphanageRq,
     deleteOrphanageRq,
+    getDataEmail,
 } = require('../controllers/OrphanageRq_Controller');
 const OrphanageRqModel = require('../models/OrphanageRq');
 const router = express.Router();
@@ -13,6 +14,8 @@ router.post('/orp', createOrphanageRq);
 
 // Get all meals
 router.get('/orp', getAllOrphanageRq);
+
+router.get('/orpmail', getDataEmail);
 
 // Update a specific meal by ID
 router.put('/orp/:id', updateOrphanageRq);

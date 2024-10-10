@@ -44,9 +44,21 @@ const deleteOrphanageRq = async (req, res) => {
   }
 };
 
+const getDataEmail = async (req, res) => {
+  const { email } = req.query;
+  
+  try {
+    const orphanageRq = await OrphanageRq.find({ email });  // Use 'Meal' instead of 'MealModel'
+    res.json(orphanageRq);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
 module.exports = {
   createOrphanageRq,
   getAllOrphanageRq,
   updateOrphanageRq,
   deleteOrphanageRq,
+  getDataEmail,
 };
