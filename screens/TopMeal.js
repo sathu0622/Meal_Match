@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons'; // For icons (if you want to use icons)
+import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const MealListScreen = () => {
+const TopMeal = () => {
   const [meals, setMeals] = useState([]);
   const navigation = useNavigation();
 
@@ -14,38 +14,24 @@ const MealListScreen = () => {
   }, []);
 
   const [isLoading, setIsLoading] = useState(true);
-  // const fetchMeals = async () => {
-  //   try {
-  //     const response = await axios.get('http://192.168.8.159:5000/api/meals');
-  //     setMeals(response.data);
-  //     fetchMeals();
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
   const fetchMeals = async () => {
     try {
-      // Retrieve logged-in user's email
       const userEmail = await AsyncStorage.getItem('userEmail');
-      
       if (!userEmail) {
         console.error('No user email found');
         return;
       }
-  
-      // Fetch meals for this email only
       const response = await axios.get(`http://192.168.8.159:5000/api/meals?email=${userEmail}`);
-      setMeals(response.data);
+      const sortedMeals = response.data.sort((a, b) => b.quantity - a.quantity); // Sort by quantity
+      setMeals(sortedMeals.slice(0, 1)); 
+      fetchMeals()
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   const deleteMeal = async (id) => {
     try {
       await axios.delete(`http://192.168.8.159:5000/api/meals/${id}`);
@@ -154,6 +140,7 @@ const MealListScreen = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -244,4 +231,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MealListScreen;
+export default TopMeal;

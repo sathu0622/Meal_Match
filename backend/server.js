@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const mealRoutes = require('./route/mealRoute');
+const orpRoutes = require('./route/OrphanageRqRoute')
 const ratingRoutes = require('./route/ratingRoutes');
 const cors = require('cors');
 const http = require('http');
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api', mealRoutes);
+app.use('/api', orpRoutes);
 app.use('/api/rating', ratingRoutes);
 
 const restaurantLocation = { latitude: 6.9035, longitude: 79.9538 };
