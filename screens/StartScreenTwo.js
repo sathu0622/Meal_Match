@@ -1,14 +1,18 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const WelcomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['#ff9966', '#ff5e62']}
+      style={styles.container}
+    >
       <Image 
-       source={require("../assets/image.jpg")}
+        source={require("../assets/image2.jpg")}
         style={styles.image}
       />
-      <Text style={styles.text}>Welcome to Our App!</Text>
+      <Text style={styles.text}>Be a Game Changer</Text>
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
           style={styles.button} 
@@ -21,7 +25,7 @@ const WelcomeScreen = ({ navigation }) => {
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -30,35 +34,40 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
   },
   image: {
-    width: '100%',
-    height: '70%',
-    opacity: 0.6,
-    borderRadius:10
+    width: '90%',
+    height: '60%',
+    opacity: 0.9,
+    borderRadius: 15,
+    marginBottom: 30,
   },
   text: {
-    fontSize: 24,
-    marginVertical: 20,
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: 'white',
     textAlign: 'center',
+    marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '80%',
+    marginTop: 20,
   },
   button: {
     flex: 1,
     marginHorizontal: 10,
-    backgroundColor: '#ff7f50',
-    padding: 15,
-    borderRadius: 5,
+    backgroundColor: 'black',
+    paddingVertical: 15,
+    borderRadius: 30,
     alignItems: 'center',
+    elevation: 5,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

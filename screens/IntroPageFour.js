@@ -1,19 +1,20 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const IntroPageFour = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={['#ff9966', '#ff5e62']} // Gradient colors
+      style={styles.container}
+    >
       <Image
-        source={require("../assets/puttu.jpeg")} // Replace with your image source
+        source={require("../assets/rotti.jpg")} // Replace with your image source
         style={styles.image}
       />
-      <Text style={styles.title}>
-        Order For Food
-      </Text>
+      <Text style={styles.title}>Be a provider</Text>
       <Text style={styles.description}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-        eiusmod tempor incididunt ut labore et dolore magna.
+        Game changers are not born, they are made.
       </Text>
       <View style={styles.buttonContainer}>
         {/* Skip Button on the left */}
@@ -29,17 +30,16 @@ const IntroPageFour = ({ navigation }) => {
           style={styles.nextButton}
           onPress={() => navigation.navigate("Register")} // Navigates to the Register page
         >
-          <Text style={styles.buttonText}>→</Text>
+          <Text style={styles.buttonText}>⇒⇨</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "orange",
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
@@ -80,15 +80,16 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   nextButton: {
-    backgroundColor: "yellow",
-    paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "black",
+    width: 60,
+    height: 60,
+    borderRadius: 30, // Circular button
   },
   buttonText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
+    fontSize: 30, // Larger font size to make the emoji visible
+    color: "white",
   },
 });
 

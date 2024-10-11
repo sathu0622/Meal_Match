@@ -59,7 +59,7 @@ const OrphanageRequestForm = ({ navigation }) => {
       mealTime,
     };
 
-    axios.post('http://192.168.8.159:5000/api/orp', requestData)
+    axios.post('http://172.20.10.12:5000/api/orp', requestData)
       .then(response => {
         alert('Orphanage request submitted successfully!');
         navigation.navigate("RequestListScreen");

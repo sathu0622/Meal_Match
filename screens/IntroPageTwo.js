@@ -1,47 +1,40 @@
-import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import React from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const IntroPageTwo = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#ff9966', '#ff5e62']} style={styles.container}>
       <Image
-        source={require("../assets/idiyappam.jpg")} // Replace with your image source
+        source={require("../assets/idiyappam.jpg")}
         style={styles.image}
       />
-      <Text style={styles.title}>
-        Order For Food
-      </Text>
-      <Text style={styles.description}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-        eiusmod tempor incididunt ut labore et dolore magna.
-      </Text>
+      <Text style={styles.title}>Make your request</Text>
+      <Text style={styles.description}>Feel free to ask from the world.</Text>
       <View style={styles.buttonContainer}>
-        {/* Skip Button on the left */}
         <TouchableOpacity
           style={styles.skipButton}
-          onPress={() => navigation.navigate("Register")} // Replace with your desired navigation destination
+          onPress={() => navigation.navigate("Register")}
         >
           <Text style={styles.skipText}>Skip</Text>
         </TouchableOpacity>
 
-        {/* Next Button on the right */}
         <TouchableOpacity
           style={styles.nextButton}
-          onPress={() => navigation.navigate("WPageThree")} // Replace with your Sign Up page
+          onPress={() => navigation.navigate("WPageThree")}
         >
-          <Text style={styles.buttonText}>→</Text>
+          <Text style={styles.buttonText}>⇒⇨</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "orange",
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 20,
   },
   image: {
@@ -53,42 +46,43 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginVertical: 10,
-    textAlign: "center",
-    color: "#fff",
+    textAlign: 'center',
+    color: '#fff',
   },
   description: {
-    textAlign: "center",
+    textAlign: 'center',
     marginHorizontal: 20,
-    color: "#fff",
+    color: '#fff',
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
     paddingHorizontal: 20,
     marginTop: 20,
   },
   skipButton: {
-    justifyContent: "center",
-    alignItems: "flex-start",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   skipText: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#fff",
+    fontWeight: 'bold',
+    color: '#fff',
   },
   nextButton: {
-    backgroundColor: "yellow",
-    paddingVertical: 12,
-    paddingHorizontal: 40,
-    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
   },
   buttonText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
+    fontSize: 30,
+    color: 'white',
   },
 });
 

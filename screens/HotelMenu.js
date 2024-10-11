@@ -1,29 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Icon from 'react-native-vector-icons/Ionicons'; // For icons (if you want to use icons)
 
-const TopMeal = () => {
+
+const HotelMenu = ({route}) => {
   const [meals, setMeals] = useState([]);
   const navigation = useNavigation();
+  const { addToCart } = useContext(CartContext);
 
+  const { email } = route.params;
   useEffect(() => {
     fetchMeals();
   }, []);
 
   const [isLoading, setIsLoading] = useState(true);
+  
+  const handleAddToCart = (item) => {
+    addToCart(item); // Call the context function to add item to cart
+    Alert.alert('Item added', `${item.name} has been added to the cart.`);
+  };
+
   const fetchMeals = async () => {
     try {
-      const userEmail = await AsyncStorage.getItem('userEmail');
+      // Retrieve logged-in user's email
+    //   const userEmail = await AsyncStorage.getItem('userEmail');
+        const userEmail = email
+      
       if (!userEmail) {
         console.error('No user email found');
         return;
       }
+  
+      // Fetch meals for this email only
       const response = await axios.get(`http://172.20.10.12:5000/api/meals?email=${userEmail}`);
-      const sortedMeals = response.data.sort((a, b) => b.quantity - a.quantity); // Sort by quantity
-      setMeals(sortedMeals.slice(0, 1)); 
+      setMeals(response.data);
       fetchMeals()
     } catch (error) {
       console.error(error);
@@ -31,35 +43,7 @@ const TopMeal = () => {
       setIsLoading(false);
     }
   };
-
-  const deleteMeal = async (id) => {
-    try {
-      await axios.delete(`http://172.20.10.12:5000/api/meals/${id}`);
-      fetchMeals();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const confirmDelete = (id) => {
-    Alert.alert(
-      'Delete Meal',
-      'Are you sure you want to delete this meal?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Delete',
-          onPress: () => deleteMeal(id),
-          style: 'destructive',
-        },
-      ],
-      { cancelable: true }
-    );
-  };
-
+  
   const getCategoryImage = (category) => {
     switch (category) {
       case 'Kottu':
@@ -92,18 +76,12 @@ const TopMeal = () => {
         <Text style={styles.mealCategory}>Category: {item.category}</Text>
         <Text style={styles.mealVegetarian}>Vegetarian: {item.isVegetarian ? 'Yes' : 'No'}</Text>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
+        <TouchableOpacity
             style={styles.updateButton}
-            onPress={() => navigation.navigate('UpdateMealScreen', { meal: item })}
+            onPress={() => handleAddToCart()}
           >
-            <Text style={styles.buttonText}>Update</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.deleteButton}
-            onPress={() => confirmDelete(item._id)}
-          >
-            <Text style={styles.buttonText}>Delete</Text>
-          </TouchableOpacity>
+                        <Text style={styles.buttonText}>Place order</Text>
+                        </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -120,27 +98,22 @@ const TopMeal = () => {
       
       {/* Bottom Navigation Bar */}
       <View style={styles.bottomNav}>
-        <TouchableOpacity onPress={() => navigation.navigate('MealListScreen')} style={styles.navButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('UserScreen')} style={styles.navButton}>
           <Icon name="home-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('MealForm')} style={styles.navButton}>
-          <Icon name="add-circle-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Add</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('TopMeal')} style={styles.navButton}>
           <Icon name="heart-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Like</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('RestReqList')} style={styles.navButton}>
-          <Icon name="document-text-outline" size={30} color="#D55A00" />
+        <TouchableOpacity onPress={() => navigation.navigate('UserProfile')} style={styles.navButton}>
+          <Icon name="person-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Request</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -160,7 +133,7 @@ const styles = StyleSheet.create({
   },
   mealImage: {
     width: 80,
-    height: 80,
+    height: 100,
     borderRadius: 10,
   },
   mealDetails: {
@@ -231,4 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TopMeal;
+export default HotelMenu;

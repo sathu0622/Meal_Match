@@ -34,7 +34,7 @@ const RequestListScreen = ({ navigation }) => {
       }
   
       // Fetch meals for this email only
-      const response = await axios.get(`http://192.168.8.159:5000/api/orpmail?email=${userEmail}`);
+      const response = await axios.get(`http://172.20.10.12:5000/api/orpmail?email=${userEmail}`);
       setRequests(response.data);
       fetchRequests();
     } catch (error) {
@@ -45,7 +45,7 @@ const RequestListScreen = ({ navigation }) => {
   // Handle delete request
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://192.168.8.159:5000/api/orp/${id}`);
+      await axios.delete(`http://172.20.10.12:5000/api/orp/${id}`);
       fetchRequests(); // Refresh the list after deletion
       alert('Request deleted successfully!');
     } catch (error) {
