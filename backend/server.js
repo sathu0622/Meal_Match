@@ -9,7 +9,6 @@ const orphanageRoutes = require("./route/OrphanageDetails")
 
 const cors = require('cors');  // Import CORS to handle cross-origin requests
 const ratingRoutes = require('./route/ratingRoutes');
-const cors = require('cors');
 const http = require('http');
 const socketIo = require('socket.io');
 
@@ -55,10 +54,6 @@ io.on('connection', (socket) => {
     });
 });
 
-mongoose.connect('mongodb+srv://spm:IhateSliit31@cluster0.fl3zzyh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', 
-    { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.log(err));
 
 const PORT = 5000;
 server.listen(PORT, () => {
