@@ -25,6 +25,9 @@ import HotelScreen from "./screens/HotelScreen";
 import UserProfile from "./screens/UserProfile";
 import ReviewForm from "./screens/ReviewForm";
 import HotelMenu from "./screens/HotelMenu";
+import MapScreen from './screens/MapScreen';
+import RatingScreen from './screens/RatingScreen';
+import RandomCodeScreen from './screens/RandomCodeScreen ';
 
 const Stack = createStackNavigator();
 
@@ -111,6 +114,21 @@ export default function App() {
           name="RestReqList"
           component={RestReqList}
           options={{ headerShown: false }} // Hides header for the bottom tabs
+        />
+        <Stack.Screen 
+          name="MapScreen" 
+          component={MapScreen}
+          options={{ headerShown: false }} // Hides header for MealForm
+        />
+        <Stack.Screen 
+          name="RatingScreen" 
+          component={RatingScreen}
+          options={{ headerShown: false }} // Hides header for MealForm
+        />
+        <Stack.Screen 
+          name="RandomCodeScreen" 
+          component={RandomCodeScreen}
+          options={{ headerShown: false }} // Hides header for MealForm
         />
         <Stack.Screen
           name="HotelDetailScreen"
