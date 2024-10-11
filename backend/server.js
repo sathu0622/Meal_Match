@@ -1,79 +1,49 @@
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const cors = require('cors');
-// const bodyParser = require('body-parser');
-
-// const app = express();
-// app.use(cors());
-// app.use(bodyParser.json());
-
-
-
-// // MongoDB Connection
-// mongoose.connect('mongodb+srv://spm:IhateSliit31@cluster0.fl3zzyh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(() => console.log('Connected to MongoDB'))
-//   .catch(err => console.log(err));
-
-// // Define Schema
-// const MealSchema = new mongoose.Schema({
-//   name: String,
-//   description: String,
-//   price: Number,
-//   quantity: Number
-// });
-
-// const Meal = mongoose.model('Meal', MealSchema);
-
-// // Create Meal
-// app.post('/meals', async (req, res) => {
-//   const meal = new Meal(req.body);
-//   await meal.save();
-//   res.json(meal);
-// });
-
-// // Read all Meals
-// app.get('/meals', async (req, res) => {
-//   const meals = await Meal.find();
-//   res.json(meals);
-// });
-
-// // Update Meal
-// app.put('/meals/:id', async (req, res) => {
-//   const meal = await Meal.findByIdAndUpdate(req.params.id, req.body, { new: true });
-//   res.json(meal);
-// });
-
-// // Delete Meal
-// app.delete('/meals/:id', async (req, res) => {
-//   await Meal.findByIdAndDelete(req.params.id);
-//   res.json({ message: 'Meal deleted' });
-// });
-
-// app.listen(5000, () => console.log('Server running on port 5000'));
-
-
 const express = require('express');
 const mongoose = require('mongoose');
 const mealRoutes = require('./route/mealRoute');
-const cors = require('cors');  // Import CORS to handle cross-origin requests
+const ratingRoutes = require('./route/ratingRoutes');
+const cors = require('cors');
+const http = require('http');
+const socketIo = require('socket.io');
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server, {
+    cors: {
+        origin: '*',
+    },
+});
 
-// Middleware
 app.use(express.json());
-app.use(cors());  // Enable CORS for all routes
+app.use(cors());
 
-// Routes
 app.use('/api', mealRoutes);
+app.use('/api/rating', ratingRoutes);
 
-// MongoDB Connection
+const restaurantLocation = { latitude: 6.9035, longitude: 79.9538 };
+const deliveryLocation = { latitude: 6.9147, longitude: 79.9729 };
+
+app.get('/restaurant-location', (req, res) => {
+    res.json(restaurantLocation);
+});
+
+io.on('connection', (socket) => {
+    console.log('Client connected');
+
+    // Emit the delivery location immediately when the client connects
+    socket.emit('locationUpdate', deliveryLocation);
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
+    });
+});
+
 mongoose.connect('mongodb+srv://spm:IhateSliit31@cluster0.fl3zzyh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', 
-  { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.log(err));
+    { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.log(err));
 
-// Start the server
 const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });

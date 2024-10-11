@@ -91,6 +91,9 @@ import IntroPageFour from "./screens/IntroPageFour";
 import MealForm from './screens/MealForm';
 import MealListScreen from './screens/MealListScreen';
 import UpdateMealScreen from './screens/UpdateMealScreen'
+import MapScreen from './screens/MapScreen';
+import RatingScreen from './screens/RatingScreen';
+import RandomCodeScreen from './screens/RandomCodeScreen ';
 
 const Stack = createStackNavigator();
 
@@ -156,6 +159,21 @@ export default function App() {
           <Stack.Screen 
           name="UpdateMealScreen" 
           component={UpdateMealScreen}
+          options={{ headerShown: false }} // Hides header for MealForm
+        />
+        <Stack.Screen 
+          name="MapScreen" 
+          component={MapScreen}
+          options={{ headerShown: false }} // Hides header for MealForm
+        />
+        <Stack.Screen 
+          name="RatingScreen" 
+          component={RatingScreen}
+          options={{ headerShown: false }} // Hides header for MealForm
+        />
+        <Stack.Screen 
+          name="RandomCodeScreen" 
+          component={RandomCodeScreen}
           options={{ headerShown: false }} // Hides header for MealForm
         />
       </Stack.Navigator>
