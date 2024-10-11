@@ -41,23 +41,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#E95322', // Orange background
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
+        color: '#FFFFFF', // White text color
     },
     code: {
         fontSize: 48,
         fontWeight: 'bold',
-        color: '#FF5722',
+        color: '#FFFFFF', // White number color
         marginBottom: 10,
     },
     info: {
         fontSize: 16,
         marginBottom: 30,
         textAlign: 'center',
+        color: '#FFFFFF', // White text color
     },
 });
 

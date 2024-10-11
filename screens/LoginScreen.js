@@ -3,7 +3,6 @@ import { Text, TextInput, View, TouchableOpacity, StyleSheet } from "react-nativ
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/fireBaseAuth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -13,14 +12,13 @@ export default function LoginScreen({ navigation }) {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      await AsyncStorage.setItem("userEmail", user.email);
 
       // Save the email in local storage
       await AsyncStorage.setItem("userEmail", user.email);
 
       alert("Login successful: " + user.email);
-      console.log(user.email)
-      navigation.navigate("MapScreen");
+      console.log(user)
+      navigation.navigate("EnterAddressScreen");
     } catch (error) {
       alert("Login error: " + error.message);
     }
