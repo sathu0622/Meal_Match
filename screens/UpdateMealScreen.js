@@ -68,7 +68,7 @@ const UpdateMealScreen = ({ route, navigation }) => {
       isVegetarian,
     };
 
-    axios.put(`http://192.168.8.159:5000/api/meals/${meal._id}`, updatedMealData)
+    axios.put(`http://172.20.10.12:5000/api/meals/${meal._id}`, updatedMealData)
       .then(response => {
         alert('Meal updated successfully!');
         navigation.navigate("MealListScreen", { refresh: true });

@@ -11,17 +11,14 @@ import IntroPageOne from "./screens/IntroPageOne";
 import IntroPageTwo from "./screens/IntroPageTwo";
 import IntroPageThree from "./screens/IntroPageThree";
 import IntroPageFour from "./screens/IntroPageFour";
-import MealForm from './screens/MealForm';
-import MealListScreen from './screens/MealListScreen';
-import UpdateMealScreen from './screens/UpdateMealScreen';
+import MealForm from "./screens/MealForm";
+import MealListScreen from "./screens/MealListScreen";
+import UpdateMealScreen from "./screens/UpdateMealScreen";
 import TopMeal from "./screens/TopMeal";
 import OrphanageRequestForm from "./screens/OrphanageRequestForm"
 import RequestListScreen from "./screens/RequestListScreen"
 import RestReqList from "./screens/RestReqList"
-
-import MapScreen from './screens/MapScreen';
-import RatingScreen from './screens/RatingScreen';
-import RandomCodeScreen from './screens/RandomCodeScreen ';
+import HotelMenu from "./screens/HotelMenu"
 
 const Stack = createStackNavigator();
 
@@ -74,18 +71,18 @@ export default function App() {
           component={UserScreen}
           options={{ headerShown: false }}
         />
-         <Stack.Screen 
-          name="MealForm" 
+        <Stack.Screen
+          name="MealForm"
           component={MealForm}
           options={{ headerShown: false }} // Hides header for MealForm
         />
-          <Stack.Screen 
-          name="MealListScreen" 
+        <Stack.Screen
+          name="MealListScreen"
           component={MealListScreen}
           options={{ headerShown: false }} // Hides header for MealForm
         />
-          <Stack.Screen 
-          name="UpdateMealScreen" 
+        <Stack.Screen
+          name="UpdateMealScreen"
           component={UpdateMealScreen}
           options={{ headerShown: false }} // Hides header for MealForm
         />
@@ -104,25 +101,15 @@ export default function App() {
           component={RequestListScreen}
           options={{ headerShown: false }} // Hides header for the bottom tabs
         />
-                <Stack.Screen
+        <Stack.Screen
           name="RestReqList"
           component={RestReqList}
           options={{ headerShown: false }} // Hides header for the bottom tabs
         />
-        <Stack.Screen 
-          name="MapScreen" 
-          component={MapScreen}
-          options={{ headerShown: false }} // Hides header for MealForm
-        />
-        <Stack.Screen 
-          name="RatingScreen" 
-          component={RatingScreen}
-          options={{ headerShown: false }} // Hides header for MealForm
-        />
-        <Stack.Screen 
-          name="RandomCodeScreen" 
-          component={RandomCodeScreen}
-          options={{ headerShown: false }} // Hides header for MealForm
+         <Stack.Screen
+          name="HotelMenu"
+          component={HotelMenu}
+          options={{ headerShown: false }} // Hides header for the bottom tabs
         />
       </Stack.Navigator>
     </NavigationContainer>

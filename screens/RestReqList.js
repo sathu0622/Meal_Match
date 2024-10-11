@@ -13,7 +13,7 @@ const RestReqList = ({ navigation }) => {
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get('http://192.168.8.159:5000/api/orp');
+      const response = await axios.get('http://172.20.10.12:5000/api/orp');
       setRequests(response.data);
       fetchRequests(); 
     } catch (error) {
@@ -25,7 +25,7 @@ const RestReqList = ({ navigation }) => {
   // Handle delete request
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://192.168.8.159:5000/api/orp/${id}`);
+      await axios.delete(`http://172.20.10.12:5000/api/orp/${id}`);
       fetchRequests(); // Refresh the list after deletion
       alert('Request deleted successfully!');
     } catch (error) {
@@ -37,7 +37,7 @@ const RestReqList = ({ navigation }) => {
   // Handle update request
   const handleUpdate = async (id) => {
     try {
-      await axios.put(`http://192.168.8.159:5000/api/orp/${id}/status`);
+      await axios.put(`http://172.20.10.12:5000/api/orp/${id}/status`);
       fetchRequests(); // Refresh the list after updating the status
       alert('Request status updated successfully!');
     } catch (error) {

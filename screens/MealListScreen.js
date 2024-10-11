@@ -9,23 +9,13 @@ const MealListScreen = () => {
   const [meals, setMeals] = useState([]);
   const navigation = useNavigation();
 
+
   useEffect(() => {
     fetchMeals();
   }, []);
 
   const [isLoading, setIsLoading] = useState(true);
-  // const fetchMeals = async () => {
-  //   try {
-  //     const response = await axios.get('http://192.168.8.159:5000/api/meals');
-  //     setMeals(response.data);
-  //     fetchMeals();
-  //   } catch (error) {
-  //     console.error(error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
+  
   const fetchMeals = async () => {
     try {
       // Retrieve logged-in user's email
@@ -37,8 +27,9 @@ const MealListScreen = () => {
       }
   
       // Fetch meals for this email only
-      const response = await axios.get(`http://192.168.8.159:5000/api/meals?email=${userEmail}`);
+      const response = await axios.get(`http://172.20.10.12:5000/api/meals?email=${userEmail}`);
       setMeals(response.data);
+      fetchMeals()
     } catch (error) {
       console.error(error);
     } finally {
@@ -48,7 +39,7 @@ const MealListScreen = () => {
   
   const deleteMeal = async (id) => {
     try {
-      await axios.delete(`http://192.168.8.159:5000/api/meals/${id}`);
+      await axios.delete(`http://172.20.10.12:5000/api/meals/${id}`);
       fetchMeals();
     } catch (error) {
       console.error(error);
@@ -117,6 +108,7 @@ const MealListScreen = () => {
             onPress={() => confirmDelete(item._id)}
           >
             <Text style={styles.buttonText}>Delete</Text>
+            
           </TouchableOpacity>
         </View>
       </View>

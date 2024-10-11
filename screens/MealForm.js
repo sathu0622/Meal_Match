@@ -66,7 +66,7 @@ const MealForm = ({ navigation }) => {
       isVegetarian
     };
 
-    axios.post('http://192.168.8.159:5000/api/meals', mealData)
+    axios.post('http://172.20.10.12:5000/api/meals', mealData)
       .then(response => {
         alert('Meal added successfully!');
         navigation.navigate("MealListScreen");

@@ -21,7 +21,7 @@ const TopMeal = () => {
         console.error('No user email found');
         return;
       }
-      const response = await axios.get(`http://192.168.8.159:5000/api/meals?email=${userEmail}`);
+      const response = await axios.get(`http://172.20.10.12:5000/api/meals?email=${userEmail}`);
       const sortedMeals = response.data.sort((a, b) => b.quantity - a.quantity); // Sort by quantity
       setMeals(sortedMeals.slice(0, 1)); 
       fetchMeals()
@@ -34,7 +34,7 @@ const TopMeal = () => {
 
   const deleteMeal = async (id) => {
     try {
-      await axios.delete(`http://192.168.8.159:5000/api/meals/${id}`);
+      await axios.delete(`http://172.20.10.12:5000/api/meals/${id}`);
       fetchMeals();
     } catch (error) {
       console.error(error);
