@@ -23,6 +23,10 @@ export default function LoginScreen({ navigation }) {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await AsyncStorage.setItem("userEmail", user.email);
+
+      // Save the email in local storage
+      await AsyncStorage.setItem("userEmail", user.email);
+
       alert("Login successful: " + user.email);
 
       const response = await axios.get(`http://172.20.10.12:5000/api/user/getuser?email=${user.email}`);
