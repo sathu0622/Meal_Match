@@ -41,4 +41,21 @@ router.put('/orp/:id/status', async (req, res) => {
   });
 
 
+  router.put('/orp/:id/order', async (req, res) => {
+    try {
+      const updatedRequest = await OrphanageRqModel.findByIdAndUpdate(
+        req.params.id, 
+        { order: true }, 
+        { new: true } // Return the updated document
+      );
+      if (!updatedRequest) {
+        return res.status(404).send('Request not found');
+      }
+      res.json(updatedRequest);
+    } catch (error) {
+      res.status(500).send('Server error');
+    }
+  });
+
+
 module.exports = router;

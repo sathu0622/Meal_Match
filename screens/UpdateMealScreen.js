@@ -7,7 +7,8 @@ import {
   Text, 
   TouchableOpacity, 
   Platform, 
-  ScrollView 
+  ScrollView, 
+  Alert 
 } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -26,6 +27,10 @@ const UpdateMealScreen = ({ route, navigation }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [isVegetarian, setIsVegetarian] = useState(meal?.isVegetarian || false);
+  
+  // Validation states
+  const [errors, setErrors] = useState({});
+  const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     if (meal) {
@@ -34,12 +39,16 @@ const UpdateMealScreen = ({ route, navigation }) => {
       setCategory(meal.category || '');
       setPrice(meal.price ? meal.price.toString() : '');
       setDiscount(meal.discount ? meal.discount.toString() : '');
-      
+
       const expiryDate = new Date(meal.expiryTime);
       setExpiryTime(isNaN(expiryDate.getTime()) ? new Date() : expiryDate);
       setIsVegetarian(meal.isVegetarian || false);
     }
   }, [meal]);
+
+  useEffect(() => {
+    validateForm();
+  }, [itemName, description, category, price, discount]);
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || expiryTime;
@@ -57,7 +66,37 @@ const UpdateMealScreen = ({ route, navigation }) => {
     setExpiryTime(updatedExpiryTime);
   };
 
+  const validateForm = () => {
+    let newErrors = {};
+
+    if (!itemName) {
+      newErrors.itemName = 'Meal name is required.';
+    }
+    if (!description) {
+      newErrors.description = 'Description is required.';
+    }
+    if (!category) {
+      newErrors.category = 'Please select a category.';
+    }
+    if (!price || isNaN(price) || parseFloat(price) <= 0) {
+      newErrors.price = 'Price must be a valid positive number.';
+    }
+    if (discount && (isNaN(discount) || parseFloat(discount) < 0 || parseFloat(discount) > 100)) {
+      newErrors.discount = 'Discount must be between 0 and 100.';
+    }
+
+    setErrors(newErrors);
+    setIsFormValid(Object.keys(newErrors).length === 0);
+  };
+
   const handleUpdate = () => {
+    validateForm();
+
+    if (!isFormValid) {
+      Alert.alert('Validation Error', 'Please correct the highlighted errors.');
+      return;
+    }
+
     const updatedMealData = {
       itemName,
       description,
@@ -81,29 +120,32 @@ const UpdateMealScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.mainContainer}>
+              <Text style={styles.title}>Update Food</Text>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Update Food</Text>
+
 
         <Text style={styles.label}>Name</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.itemName && styles.errorInput]}
           placeholder="Meal name, e.g., 'Rice and Curry'"
           value={itemName}
           onChangeText={setName}
         />
+        {errors.itemName && <Text style={styles.errorText}>{errors.itemName}</Text>}
 
         <Text style={styles.label}>Description</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.description && styles.errorInput]}
           placeholder="Brief description of the meal"
           value={description}
           onChangeText={setDescription}
         />
+        {errors.description && <Text style={styles.errorText}>{errors.description}</Text>}
 
         <Text style={styles.label}>Category</Text>
         <Picker
           selectedValue={category}
-          style={styles.picker}
+          style={[styles.picker, errors.category && styles.errorInput]}
           onValueChange={(itemValue) => setCategory(itemValue)}
         >
           <Picker.Item label="Select Category" value="" />
@@ -114,24 +156,27 @@ const UpdateMealScreen = ({ route, navigation }) => {
           <Picker.Item label="Hoppers" value="Hoppers" />
           <Picker.Item label="Shorteats" value="Shorteats" />
         </Picker>
+        {errors.category && <Text style={styles.errorText}>{errors.category}</Text>}
 
         <Text style={styles.label}>Price</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.price && styles.errorInput]}
           placeholder="Enter price, e.g., '120.00'"
           value={price}
           keyboardType="numeric"
           onChangeText={setPrice}
         />
+        {errors.price && <Text style={styles.errorText}>{errors.price}</Text>}
 
         <Text style={styles.label}>Discount</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, errors.discount && styles.errorInput]}
           placeholder="Discount percentage, e.g., '10%'"
           value={discount}
           keyboardType="numeric"
           onChangeText={setDiscount}
         />
+        {errors.discount && <Text style={styles.errorText}>{errors.discount}</Text>}
 
         <Text style={styles.label}>Expiry Date and Time</Text>
         <TouchableOpacity onPress={() => setShowDatePicker(true)}>
@@ -173,7 +218,11 @@ const UpdateMealScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.postButton} onPress={handleUpdate}>
+        <TouchableOpacity 
+          style={[styles.postButton, !isFormValid && styles.disabledButton]} 
+          onPress={handleUpdate}
+          disabled={!isFormValid}
+        >
           <Text style={styles.postButtonText}>Update</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -189,7 +238,7 @@ const UpdateMealScreen = ({ route, navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('TopMeal')} style={styles.navButton}>
           <Icon name="heart-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Like</Text>
+          <Text style={styles.navText}>Top</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('RestReqList')} style={styles.navButton}>
           <Icon name="document-text-outline" size={30} color="#D55A00" />
@@ -203,19 +252,22 @@ const UpdateMealScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#FBE6B9',
+    backgroundColor: '#fff',
   },
   container: {
     padding: 20,
-    backgroundColor: '#FBE6B9',
+    backgroundColor: '#fff',
     paddingBottom: 100, // To ensure content is not hidden behind the navigation bar
   },
   title: {
     fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 20,
     textAlign: 'center',
-    marginBottom: 20,
-    color: '#D55A00',
+    color: '#f45d22',
   },
+  
   label: {
     fontSize: 16,
     marginBottom: 5,

@@ -1,47 +1,30 @@
-// data/data.js
-export const menuItems = [
-  { 
-    id: 1, 
-    name: 'Pizza', 
-    calories: 300, 
-    price: 10, 
-    description: 'Delicious cheese pizza with tomato sauce and fresh basil.',
-    image: 'pic1.jpg', // Add the image URL
-    ingredients: ['Flour', 'Cheese', 'Tomato Sauce', 'Basil'],
-    allergens: ['Dairy', 'Gluten'],
-    contact: 'Call us at: (555) 123-4567'
+// data.js (or mealsData)
+export const mealsData = [
+  {
+    _id: '1',
+    itemName: 'Chicken Kottu',
+    category: 'Kottu',
+    price: 450,
+    description: 'Delicious chicken kottu.',
+    discount: 10,
+    expiryTime: '2024-10-12T18:00:00',
+    ingredients: ['Chicken', 'Roti', 'Curry leaves', 'Spices', 'Vegetables'],
+    allergens: ['Gluten', 'Eggs'],  // Add allergens
+    contactNumber: '012-345-6789',  // Add a contact number for further details
+    calories: 450, // Add calories here
   },
-  { 
-    id: 2, 
-    name: 'Burger', 
-    calories: 500, 
-    price: 8, 
-    description: 'Juicy beef burger with lettuce, tomato, and cheese.',
-    image: 'https://example.com/burger.jpg',
-    ingredients: ['Beef', 'Lettuce', 'Tomato', 'Cheese', 'Bun'],
-    allergens: ['Dairy', 'Gluten'],
-    contact: 'Call us at: (555) 234-5678'
+  {
+    _id: '2',
+    itemName: 'Rice and Curry',
+    category: 'Rice',
+    price: 300,
+    description: 'Traditional rice and curry.',
+    discount: 5,
+    expiryTime: '2024-10-12T18:00:00',
+    ingredients: ['Rice', 'Chicken curry', 'Dhal curry', 'Papadam', 'Pickle'],
+    allergens: ['Dairy', 'Mustard'],  // Add allergens
+    contactNumber: '098-765-4321',  // Add a contact number for further details
+    calories: 450, // Add calories here
   },
-  { 
-    id: 3, 
-    name: 'Salad', 
-    calories: 150, 
-    price: 5, 
-    description: 'Fresh mixed salad with a variety of vegetables.',
-    image: 'https://example.com/salad.jpg',
-    ingredients: ['Lettuce', 'Tomato', 'Cucumber', 'Olives'],
-    allergens: ['None'],
-    contact: 'Call us at: (555) 345-6789'
-  },
-  { 
-    id: 4, 
-    name: 'Soda', 
-    calories: 200, 
-    price: 3, 
-    description: 'Refreshing carbonated drink.',
-    image: 'https://example.com/soda.jpg',
-    ingredients: ['Carbonated Water', 'Sugar', 'Flavoring'],
-    allergens: ['None'],
-    contact: 'Call us at: (555) 456-7890'
-  },
+  // Add more items as needed
 ];

@@ -64,7 +64,7 @@ const RequestListScreen = ({ navigation }) => {
       {/* Placeholder for Orphanage Profile Image */}
       <View style={styles.profileSection}>
         <Image 
-          source={{ uri: 'https://example.com/placeholder-image.jpg' }} 
+          source={require("../assets/req.png")}
           style={styles.profileImage} 
         />
         <View style={styles.textContainer}>
@@ -110,6 +110,7 @@ const RequestListScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+<Text style={styles.title}>Your Requests</Text>
       <FlatList
         data={requests}
         renderItem={renderItem}
@@ -117,10 +118,7 @@ const RequestListScreen = ({ navigation }) => {
         contentContainerStyle={{ paddingBottom: 20 }}
       />
             <View style={styles.bottomNav}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <Icon name="home-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
+        
         <TouchableOpacity onPress={() => navigation.navigate('OrphanageRequestForm')}>
           <Icon name="add-circle-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Add</Text>
@@ -151,6 +149,15 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
   },
+  
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#f45d22',
+  },
+  
   profileSection: {
     flexDirection: 'row',
     alignItems: 'center',

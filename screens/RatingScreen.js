@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'reac
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const RatingScreen = () => {
+const RatingScreen = ({navigation}) => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [email, setEmail] = useState(null); // State to hold the email
@@ -25,7 +25,7 @@ const RatingScreen = () => {
 
   const submitRating = async () => {
     try {
-      await axios.post('http://192.168.8.138:5000/api/rating/ratings', {
+      await axios.post('http://172.20.10.12:5000/api/rating/ratings', {
         driverName: 'David Wayne',
         rating,
         review,
@@ -54,7 +54,8 @@ const RatingScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton}
+      onPress={() => navigation.navigate("UserScreen")}>
         <Text>{'<'} Back</Text>
       </TouchableOpacity>
       <Text style={styles.title}>Driver Rating</Text>

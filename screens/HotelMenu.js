@@ -1,110 +1,87 @@
-import React, { useEffect, useState, useContext } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
-import axios from "axios";
-import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/Ionicons"; // For icons (if you want to use icons)
-//import { CartContext } from "../CartContext";
+import React, { useState } from "react";
+import { Text, View, FlatList, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
+import { mealsData } from "../data/data";  // Import meal data from data.js
+import Icon from "react-native-vector-icons/Ionicons"; // For icons
 
-const HotelMenu = ({ route }) => {
-  const [meals, setMeals] = useState([]);
-  const navigation = useNavigation();
-  
-  const { email } = route.params;
-  useEffect(() => {
-    fetchMeals();
-  }, []);
+export default function HotelMenu({ navigation }) { // Make sure to get navigation prop
+  const [cart, setCart] = useState([]);  // State to store cart items
 
-  const [isLoading, setIsLoading] = useState(true);
+  // Function to handle adding items to the cart
+const addToCart = (item) => {
+  setCart((prevCart) => {
+    // Check if the item is already in the cart
+    const existingItem = prevCart.find(cartItem => cartItem._id === item._id);
 
-  
-
-  const fetchMeals = async () => {
-    try {
-      // Retrieve logged-in user's email
-      //   const userEmail = await AsyncStorage.getItem('userEmail');
-      const userEmail = email;
-
-      if (!userEmail) {
-        console.error("No user email found");
-        return;
-      }
-
-      // Fetch meals for this email only
-      const response = await axios.get(
-        `http://172.20.10.12:5000/api/meals?email=${userEmail}`
+    if (existingItem) {
+      // If it exists, update the quantity
+      return prevCart.map(cartItem =>
+        cartItem._id === item._id
+          ? { ...cartItem, quantity: (cartItem.quantity || 1) + 1 }
+          : cartItem
       );
-      setMeals(response.data);
-      fetchMeals();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+    } else {
+      // If not, add the item with a quantity of 1
+      return [...prevCart, { ...item, quantity: 1 }];
     }
-  };
+  });
+  
+  Alert.alert("Added to Cart", `${item.itemName} has been added to your cart.`);
+};
 
+
+  // Render each meal in the list
+  const renderMeal = ({ item }) => (
+    <View style={styles.mealCard}>
+      {/* Navigate to IngredientsScreen when the image is clicked */}
+      
+ {/* Navigate to IngredientsScreen when the image is clicked */}
+ <TouchableOpacity onPress={() => navigation.navigate('IngredientsScreen', {
+        itemName: item.itemName,
+        ingredients: item.ingredients,
+        allergens: item.allergens,  // Pass allergens
+        contactNumber: item.contactNumber,  // Pass contact number
+      })}>
+        <Image source={getCategoryImage(item.category)} style={styles.mealImage} />
+      </TouchableOpacity>
+
+
+
+      <View style={styles.mealDetails}>
+        <Text style={styles.mealName}>{item.itemName}</Text>
+        <Text style={styles.mealPrice}>Rs. {item.price}</Text>
+        <Text style={styles.mealDesc}>{item.description}</Text>
+        <Text style={styles.mealDiscount}>{item.discount}% Discount</Text>
+        <Text style={styles.mealTime}>Expiry: {new Date(item.expiryTime).toLocaleString()}</Text>
+        
+        {/* Add to Cart button */}
+        <TouchableOpacity style={styles.cartButton} onPress={() => addToCart(item)}>
+          <Text style={styles.cartButtonText}>Add to Cart</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+
+
+  // Return the correct image for each category
   const getCategoryImage = (category) => {
     switch (category) {
       case "Kottu":
         return require("../assets/kottu.png");
       case "Rice":
         return require("../assets/rice and curry.jpg");
-      case "Parotta":
-        return require("../assets/kottu.png");
-      case "String Hoppers":
-        return require("../assets/string hoppers.jpg");
-      case "Hoppers":
-        return require("../assets/hoppers.jpg");
-      case "Shorteats":
-        return require("../assets/shorteats.jpg");
+      // Add more categories and images as needed
       default:
         return require("../assets/other.jpg");
     }
   };
 
-  const renderMeal = ({ item }) => (
-    <View style={styles.mealCard}>
-      <Image
-        source={getCategoryImage(item.category)}
-        style={styles.mealImage}
-      />
-      <View style={styles.mealDetails}>
-        <Text style={styles.mealName}>{item.itemName}</Text>
-        <Text style={styles.mealPrice}>Rs.{item.price}</Text>
-        <Text style={styles.mealDesc}>{item.discount}% Discount</Text>
-        <Text style={styles.mealTime}>
-          Expiry: {new Date(item.expiryTime).toLocaleString()}
-        </Text>
-        <Text style={styles.mealCategory}>Category: {item.category}</Text>
-        <Text style={styles.mealVegetarian}>
-          Vegetarian: {item.isVegetarian ? "Yes" : "No"}
-        </Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.updateButton}
-           
-          >
-            <Text style={styles.buttonText}>Place order</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
-  );
-
   return (
     <View style={styles.container}>
       <FlatList
-        data={meals}
+        data={mealsData}  // Using mealsData from the data.js file
         keyExtractor={(item) => item._id}
         renderItem={renderMeal}
-        contentContainerStyle={{ paddingBottom: 100 }}
       />
 
       {/* Bottom Navigation Bar */}
@@ -116,6 +93,7 @@ const HotelMenu = ({ route }) => {
           <Icon name="home-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => navigation.navigate("TopMeal")}
           style={styles.navButton}
@@ -123,22 +101,57 @@ const HotelMenu = ({ route }) => {
           <Icon name="heart-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Like</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
-          onPress={() => navigation.navigate("UserProfile")}
+          onPress={() => navigation.navigate("RequestScreen")}
           style={styles.navButton}
         >
           <Icon name="person-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Request</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+  onPress={() => navigation.navigate("CartScreen", { cartItems: cart, setCart })} // Pass setCart to update cart
+  style={styles.navButton}
+>
+  <Icon name="cart-outline" size={30} color="#D55A00" />
+  <Text style={styles.navText}>Cart</Text>
+  {cart.length > 0 && (
+    <View style={styles.badge}>
+      <Text style={styles.badgeText}>{cart.length}</Text>
+    </View>
+  )}
+</TouchableOpacity>
+
+
+
       </View>
     </View>
   );
-};
+}
+
+// Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
     backgroundColor: "#fff",
-    padding: 10,
+  },
+  badge: {
+    position: 'absolute',
+    right: 10,
+    top: 10,
+    backgroundColor: '#D55A00',
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badgeText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
   mealCard: {
     flexDirection: "row",
@@ -175,37 +188,40 @@ const styles = StyleSheet.create({
     color: "#999",
     marginVertical: 2,
   },
+  mealDiscount: {
+    fontSize: 12,
+    color: "#999",
+  },
   mealTime: {
     fontSize: 12,
     color: "#999",
   },
-  mealCategory: {
-    fontSize: 12,
-    color: "#999",
-  },
-  mealVegetarian: {
-    fontSize: 12,
-    color: "#999",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 5,
-  },
-  updateButton: {
-    backgroundColor: "#ff7d3b",
-    paddingVertical: 5,
+  cartButton: {
+    backgroundColor: "#f45d22",
+    paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 20,
+    marginTop: 10,
+    alignSelf: "flex-start",
   },
-  deleteButton: {
-    backgroundColor: "#ff5b5b",
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 20,
-  },
-  buttonText: {
+  cartButtonText: {
     color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  cartInfo: {
+    position: "absolute",
+    bottom: 10,
+    left: 0,
+    right: 0,
+    backgroundColor: "#f45d22",
+    padding: 10,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  cartText: {
+    color: "#fff",
+    fontSize: 16,
     fontWeight: "bold",
   },
   bottomNav: {
@@ -215,6 +231,12 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#ccc",
     backgroundColor: "#f5f5f5",
+    position: "absolute", // Makes the nav bar stick to the bottom
+    bottom: 0,            // Aligns it to the bottom of the screen
+    width: "100%",         // Stretches the nav bar across the full width
+  },
+  navButton: {
+    alignItems: "center",
   },
   navText: {
     textAlign: "center",
@@ -223,5 +245,3 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
-
-export default HotelMenu;

@@ -84,7 +84,9 @@ const RestReqList = ({ navigation }) => {
   );
 
   return (
+
     <View style={styles.container}>
+<Text style={styles.title}>Orphanage Request</Text>
       <FlatList
         data={requests}
         renderItem={renderItem}
@@ -104,7 +106,7 @@ const RestReqList = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('TopMeal')} style={styles.navButton}>
           <Icon name="heart-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Like</Text>
+          <Text style={styles.navText}>Top</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('RestReqList')} style={styles.navButton}>
           <Icon name="document-text-outline" size={30} color="#D55A00" />
@@ -121,6 +123,15 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#F3F4F6',
   },
+
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#f45d22',
+  },
+  
   requestItem: {
     backgroundColor: '#FFF',
     borderRadius: 15,

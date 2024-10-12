@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const OrphanageRequestForm = ({ navigation }) => {
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
-  const [contectNo, setContectNo] = useState('');
+  const [contactNo, setContactNo] = useState('');
   const [count, setCount] = useState('');
   const [items, setItems] = useState('');
   const [comments, setComments] = useState('');
@@ -18,22 +18,19 @@ const OrphanageRequestForm = ({ navigation }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [email, setEmail] = useState(null); // State to hold the email
 
-
   useEffect(() => {
-  
     // Retrieve the email from AsyncStorage when the component mounts
     AsyncStorage.getItem("userEmail")
-        .then((storedEmail) => {
-            if (storedEmail !== null) {
-                console.log("User Email:", storedEmail);
-                setEmail(storedEmail); // Store email in state if needed
-            }
-        })
-        .catch((error) => {
-            console.error("Error retrieving user email:", error);
+      .then((storedEmail) => {
+        if (storedEmail !== null) {
+          console.log("User Email:", storedEmail);
+          setEmail(storedEmail); // Store email in state if needed
+        }
+      })
+      .catch((error) => {
+        console.error("Error retrieving user email:", error);
       });
-},[]);
-
+  }, []);
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -41,19 +38,50 @@ const OrphanageRequestForm = ({ navigation }) => {
     setDate(currentDate);
   };
 
+  const validateFields = () => {
+    if (!name) {
+      alert('Please enter the orphanage name.');
+      return false;
+    }
+    if (!address) {
+      alert('Please enter the address.');
+      return false;
+    }
+    if (!contactNo || !/^\d{10}$/.test(contactNo)) {
+      alert('Please enter a valid 10-digit contact number.');
+      return false;
+    }
+    if (!count || isNaN(count) || parseInt(count) <= 0) {
+      alert('Please enter a valid number of people.');
+      return false;
+    }
+    if (!items) {
+      alert('Please specify the items needed.');
+      return false;
+    }
+    if (!mealTime) {
+      alert('Please select a meal time.');
+      return false;
+    }
+    if (!date || date < new Date()) {
+      alert('Please select a valid future date.');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
-    if (!name || !address || !contectNo || !count || !items || !mealTime || !date) {
-      alert("Please fill in all required fields.");
+    if (!validateFields()) {
       return;
     }
 
     const requestData = {
       name,
       address,
-      contectNo,
+      contactNo,
       count: parseInt(count),
       items,
-      email: email,
+      email,
       comments,
       date: date.toISOString(),
       mealTime,
@@ -72,8 +100,9 @@ const OrphanageRequestForm = ({ navigation }) => {
 
   return (
     <View style={styles.mainContainer}>
+              <Text style={styles.title}>Orphanage Request Form</Text>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Orphanage Request Form</Text>
+
 
         <Text style={styles.label}>Orphanage Name</Text>
         <TextInput
@@ -95,9 +124,9 @@ const OrphanageRequestForm = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter contact number"
-          value={contectNo}
+          value={contactNo}
           keyboardType="phone-pad"
-          onChangeText={setContectNo}
+          onChangeText={setContactNo}
         />
 
         <Text style={styles.label}>People Count</Text>
@@ -157,19 +186,16 @@ const OrphanageRequestForm = ({ navigation }) => {
         </TouchableOpacity>
       </ScrollView>
 
-            {/* Bottom Navigation Bar */}
-            <View style={styles.bottomNav}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.navButton}>
-          <Icon name="home-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
+      {/* Bottom Navigation Bar */}
+      <View style={styles.bottomNav}>
+        
         <TouchableOpacity onPress={() => navigation.navigate('OrphanageRequestForm')} style={styles.navButton}>
           <Icon name="add-circle-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Add</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('RequestListScreen')} style={styles.navButton}>
           <Icon name="document-text-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Requste</Text>
+          <Text style={styles.navText}>Request</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -182,15 +208,18 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 20,
-    backgroundColor: '#FBE6B9',
+    backgroundColor: '#fff',
     paddingBottom: 100,
   },
   title: {
     fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 20,
     textAlign: 'center',
-    marginBottom: 20,
-    color: '#D55A00',
+    color: '#f45d22',
   },
+  
   label: {
     fontSize: 16,
     marginBottom: 5,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -8,12 +8,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const TopMeal = () => {
   const [meals, setMeals] = useState([]);
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchMeals();
   }, []);
 
-  const [isLoading, setIsLoading] = useState(true);
   const fetchMeals = async () => {
     try {
       const userEmail = await AsyncStorage.getItem('userEmail');
@@ -23,8 +23,7 @@ const TopMeal = () => {
       }
       const response = await axios.get(`http://172.20.10.12:5000/api/meals?email=${userEmail}`);
       const sortedMeals = response.data.sort((a, b) => b.quantity - a.quantity); // Sort by quantity
-      setMeals(sortedMeals.slice(0, 1)); 
-      fetchMeals()
+      setMeals(sortedMeals.slice(0, 3)); // Show top 5 meals
     } catch (error) {
       console.error(error);
     } finally {
@@ -87,7 +86,7 @@ const TopMeal = () => {
         <Text style={styles.mealPrice}>Rs.{item.price}</Text>
         <Text style={styles.mealDesc}>{item.discount}% Discount</Text>
         <Text style={styles.mealTime}>
-          Expiry: {new Date(item.expiryTime).toLocaleString()} 
+          Expiry: {new Date(item.expiryTime).toLocaleString()}
         </Text>
         <Text style={styles.mealCategory}>Category: {item.category}</Text>
         <Text style={styles.mealVegetarian}>Vegetarian: {item.isVegetarian ? 'Yes' : 'No'}</Text>
@@ -111,14 +110,18 @@ const TopMeal = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={meals}
-        keyExtractor={(item) => item._id}
-        renderItem={renderMeal}
-        contentContainerStyle={{ paddingBottom: 100 }}
-      />
+      <Text style={styles.heading}>MOST SOLD FOODS</Text>
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#f45d22" />
+      ) : (
+        <FlatList
+          data={meals}
+          keyExtractor={(item) => item._id}
+          renderItem={renderMeal}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        />
+      )}
       
-      {/* Bottom Navigation Bar */}
       <View style={styles.bottomNav}>
         <TouchableOpacity onPress={() => navigation.navigate('MealListScreen')} style={styles.navButton}>
           <Icon name="home-outline" size={30} color="#D55A00" />
@@ -130,7 +133,7 @@ const TopMeal = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('TopMeal')} style={styles.navButton}>
           <Icon name="heart-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Like</Text>
+          <Text style={styles.navText}>Top</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('RestReqList')} style={styles.navButton}>
           <Icon name="document-text-outline" size={30} color="#D55A00" />
@@ -146,6 +149,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 10,
+  
+  },
+  heading: {
+    fontSize: 24,
+    marginTop:10,
+    fontWeight: 'bold',
+    color: '#f45d22',
+    marginBottom: 15,
+    textAlign: 'center',
   },
   mealCard: {
     flexDirection: 'row',

@@ -100,9 +100,7 @@ const MapScreen = () => {
     // Separate useEffect for navigation after delivery completion
     useEffect(() => {
         const timer = setTimeout(() => {
-            // Show an alert message before navigating
-            alert("Delivery Person Reached Your Location");
-            navigation.navigate("RandomCodeScreen");
+            navigation.navigate("VolunteerConfirm");
         }, 15000);
     
         return () => clearTimeout(timer); // Cleanup the timer
@@ -170,8 +168,34 @@ const MapScreen = () => {
                 )}
             </MapView>
 
-            
-           
+            <TouchableOpacity 
+                style={styles.deliveryButton} 
+                onPress={() => setModalVisible(true)}
+            >
+                <Icon name="user" size={24} color="white" />
+            </TouchableOpacity>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>Delivery Person Details</Text>
+                        <Text>Name: {deliveryPersonDetails.name}</Text>
+                        <Text>Phone: {deliveryPersonDetails.phone}</Text>
+                        <Text>Vehicle: {deliveryPersonDetails.vehicle}</Text>
+                        <TouchableOpacity
+                            style={styles.closeButton}
+                            onPress={() => setModalVisible(false)}
+                        >
+                            <Text style={styles.closeButtonText}>Close</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };

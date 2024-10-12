@@ -47,7 +47,7 @@ export default function ProfileScreen({ route, navigation }) {
 
   return (
     <ImageBackground
-      source={require("../assets/userjpg.jpg")}
+      source={require("../assets/puthu.jpg")}
       style={styles.backgroundImage}
     >
       <View style={styles.container}>
@@ -85,13 +85,13 @@ export default function ProfileScreen({ route, navigation }) {
           <Icon name="home-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('TopMeal')} style={styles.navButton}>
+        <TouchableOpacity onPress={() => navigation.navigate('MyFavourite')} style={styles.navButton}>
           <Icon name="heart-outline" size={30} color="#D55A00" />
           <Text style={styles.navText}>Like</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('UserProfile')} style={styles.navButton}>
           <Icon name="person-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Request</Text>
+          <Text style={styles.navText}>Profile</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -101,7 +101,7 @@ export default function ProfileScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 0.8,
+    flex: 1,
     resizeMode: "cover",
     opacity: 0.8,
   },
@@ -119,15 +119,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   welcomeText: {
+    marginLeft:10,
+    marginBottom:10,
     fontSize: 18,
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
   profileImage: {
-    width: 40,
-    height: 40,
+    width: 28,
+    height: 28,
     borderRadius: 20,
-    marginHorizontal: 10,
+    marginHorizontal: 15,
+    
   },
   logoutButton: {
     backgroundColor: "black",

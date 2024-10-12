@@ -50,11 +50,43 @@ const MealForm = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    if (!name || !description || !price || !category || !expiryTime) {
-      alert("Please fill in all fields, including selecting a date and time.");
+    // Validation
+    if (!name.trim()) {
+      alert('Please enter the meal name.');
       return;
     }
-
+  
+    if (!description.trim()) {
+      alert('Please enter a description.');
+      return;
+    }
+  
+    if (!category) {
+      alert('Please select a category.');
+      return;
+    }
+  
+    if (!price || isNaN(price) || parseFloat(price) <= 0) {
+      alert('Please enter a valid price greater than 0.');
+      return;
+    }
+  
+    if (discount && (isNaN(discount) || parseInt(discount) < 0 || parseInt(discount) > 100)) {
+      alert('Please enter a valid discount between 0 and 100.');
+      return;
+    }
+  
+    if (expiryTime <= new Date()) {
+      alert('Expiry time must be in the future.');
+      return;
+    }
+  
+    if (!email) {
+      alert('Email not found. Please try again later.');
+      return;
+    }
+  
+    // If all validations pass, proceed with submission
     const mealData = {
       itemName: name,
       description,
@@ -65,7 +97,7 @@ const MealForm = ({ navigation }) => {
       expiryTime: expiryTime.toISOString(),
       isVegetarian
     };
-
+  
     axios.post('http://172.20.10.12:5000/api/meals', mealData)
       .then(response => {
         alert('Meal added successfully!');
@@ -76,11 +108,14 @@ const MealForm = ({ navigation }) => {
         alert('Error adding meal. Please try again.');
       });
   };
+  
 
   return (
+    
     <View style={styles.mainContainer}>
+              <Text style={styles.title}>Post Food</Text>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Post Food</Text>
+
 
         <Text style={styles.label}>Name</Text>
         <TextInput
@@ -187,7 +222,7 @@ const MealForm = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('TopMeal')} style={styles.navButton}>
           <Icon name="heart-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Like</Text>
+          <Text style={styles.navText}>Top</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('RestReqList')} style={styles.navButton}>
           <Icon name="document-text-outline" size={30} color="#D55A00" />
@@ -201,18 +236,22 @@ const MealForm = ({ navigation }) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    backgroundColor: '#fff',
   },
   container: {
     padding: 20,
-    backgroundColor: '#FBE6B9',
+    backgroundColor: '#fff',
     paddingBottom: 100,
   },
   title: {
     fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 20,
     textAlign: 'center',
-    marginBottom: 20,
-    color: '#D55A00',
+    color: '#f45d22',
   },
+  
   label: {
     fontSize: 16,
     marginBottom: 5,

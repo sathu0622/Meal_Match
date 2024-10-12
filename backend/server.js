@@ -6,9 +6,9 @@ const orpRoutes = require('./route/OrphanageRqRoute')
 const reviewRoutes = require("./route/UserReview");
 const hotelRoutes = require("./route/HotelDetails")
 const orphanageRoutes = require("./route/OrphanageDetails")
+const ratingRoutes = require("./route/ratingRoutes")
 
 const cors = require('cors');  // Import CORS to handle cross-origin requests
-const ratingRoutes = require('./route/ratingRoutes');
 const http = require('http');
 const socketIo = require('socket.io');
 
@@ -29,12 +29,13 @@ app.use("/api/user", userRoutes);
 app.use("/api/review", reviewRoutes); 
 app.use('/api/hotel', hotelRoutes);
 app.use('/api/orphanage', orphanageRoutes);
+app.use('/api/rating', ratingRoutes);
 
 mongoose.connect('mongodb+srv://spm:IhateSliit31@cluster0.fl3zzyh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', 
   { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.log(err));
-app.use('/api/rating', ratingRoutes);
+
 
 const restaurantLocation = { latitude: 6.9035, longitude: 79.9538 };
 const deliveryLocation = { latitude: 6.9147, longitude: 79.9729 };

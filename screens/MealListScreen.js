@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, FlatList, StyleSheet,ActivityIndicator, TouchableOpacity, Image, Alert } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons'; // For icons (if you want to use icons)
@@ -117,14 +117,18 @@ const MealListScreen = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={meals}
-        keyExtractor={(item) => item._id}
-        renderItem={renderMeal}
-        contentContainerStyle={{ paddingBottom: 100 }}
-      />
+      <Text style={styles.heading}>FOOD LIST</Text>
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#f45d22" />
+      ) : (
+        <FlatList
+          data={meals}
+          keyExtractor={(item) => item._id}
+          renderItem={renderMeal}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        />
+      )}
       
-      {/* Bottom Navigation Bar */}
       <View style={styles.bottomNav}>
         <TouchableOpacity onPress={() => navigation.navigate('MealListScreen')} style={styles.navButton}>
           <Icon name="home-outline" size={30} color="#D55A00" />
@@ -136,7 +140,7 @@ const MealListScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('TopMeal')} style={styles.navButton}>
           <Icon name="heart-outline" size={30} color="#D55A00" />
-          <Text style={styles.navText}>Like</Text>
+          <Text style={styles.navText}>Top</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('RestReqList')} style={styles.navButton}>
           <Icon name="document-text-outline" size={30} color="#D55A00" />
@@ -146,11 +150,20 @@ const MealListScreen = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
     padding: 10,
+  },
+  heading: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop:10,
+    color: '#f45d22',
+    marginBottom: 15,
+    textAlign: 'center',
   },
   mealCard: {
     flexDirection: 'row',
